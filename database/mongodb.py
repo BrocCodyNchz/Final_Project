@@ -29,7 +29,7 @@ accounts_collection.create_index('name')
 transactions_collection.create_index('account_id')
 transactions_collection.create_index('transaction_date')
 
-# Default accounts (Bakery-specific)
+# Default accounts 
 accounts = [
     {'name': 'Sales', 'account_type': 'Income', 'balance': 0.00, 'created_at': datetime.now()},
     {'name': 'Ingredients', 'account_type': 'Expense', 'balance': 0.00, 'created_at': datetime.now()},

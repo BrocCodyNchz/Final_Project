@@ -136,7 +136,7 @@ async def register(request: Request):
         print(f"Registration error: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-# ===== TRANSACTION ROUTES =====
+# TRANSACTION ROUTES
 
 @app.get("/api/transactions")
 def get_transactions(start_date: str = None, end_date: str = None, transaction_type: str = None):
@@ -268,7 +268,7 @@ def delete_transaction(transaction_id: str):
         print(f"Error deleting transaction: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-# ===== REPORTS ROUTES =====
+# REPORTS ROUTES
 
 @app.get("/api/reports/income-statement")
 def get_income_statement(start_date: str = None, end_date: str = None):
