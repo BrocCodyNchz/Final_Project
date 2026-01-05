@@ -1,0 +1,512 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-dark-950 text-gray-100;
+  }
+}
+
+@layer components {
+  /* Layout */
+  .app-container {
+    @apply min-h-screen bg-gradient-to-br from-dark-950 via-dark-900 to-dark-850;
+  }
+
+  /* Header */
+  .app-header {
+    @apply glass border-b border-accent-500/20 backdrop-blur-xl;
+  }
+
+  .header-content {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6;
+  }
+
+  .header-title {
+    @apply text-4xl font-bold bg-gradient-to-r from-accent-400 to-accent-600 bg-clip-text text-transparent;
+  }
+
+  .header-subtitle {
+    @apply text-gray-400 mt-1;
+  }
+
+  /* Navigation */
+  .nav-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6;
+  }
+
+  .nav-buttons {
+    @apply flex gap-2;
+  }
+
+  .nav-button {
+    @apply px-6 py-3 rounded-lg font-medium transition-all duration-300 glass-hover text-gray-400 border-transparent;
+  }
+
+  .nav-button-active {
+    @apply px-6 py-3 rounded-lg font-medium transition-all duration-300 glass border-accent-500 text-accent-400 shadow-lg shadow-accent-500/20;
+  }
+
+  /* Content Container */
+  .content-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6;
+  }
+
+  .main-content {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8;
+  }
+
+  .section-spacing {
+    @apply space-y-6;
+  }
+
+  /* Glass Effects */
+  .glass {
+    @apply bg-white/10 backdrop-blur-md border border-white/20;
+  }
+  
+  .glass-hover {
+    @apply hover:bg-white/15 transition-all duration-300;
+  }
+
+  /* Error Banner */
+  .error-banner {
+    @apply glass border-red-500/50 bg-red-500/10 rounded-lg p-4 flex items-center justify-between;
+  }
+
+  .error-banner-content {
+    @apply flex items-center gap-3;
+  }
+
+  .error-banner-dot {
+    @apply w-2 h-2 bg-red-500 rounded-full animate-pulse;
+  }
+
+  .error-banner-text {
+    @apply text-red-300;
+  }
+
+  .error-banner-close {
+    @apply text-red-300 hover:text-red-100 transition-colors bg-transparent border-none cursor-pointer text-xl;
+  }
+
+  /* Loading */
+  .loading-container {
+    @apply glass rounded-lg p-4 text-center;
+  }
+
+  .loading-spinner {
+    @apply inline-block w-6 h-6 border-2 border-accent-500 border-t-transparent rounded-full animate-spin;
+  }
+
+  .loading-text {
+    @apply ml-3 text-gray-400;
+  }
+
+  /* Modal */
+  .modal-overlay {
+    @apply fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4;
+  }
+
+  .modal-content {
+    @apply glass rounded-xl p-6 max-w-md w-full border-2 border-accent-500/30 shadow-2xl shadow-accent-500/20;
+  }
+
+  .modal-title {
+    @apply text-2xl font-bold text-accent-400 mb-3;
+  }
+
+  .modal-text {
+    @apply text-gray-300 mb-6;
+  }
+
+  .modal-buttons {
+    @apply flex gap-3;
+  }
+
+  .modal-button-cancel {
+    @apply flex-1 px-4 py-2 glass-hover rounded-lg text-gray-300 font-medium transition-all;
+  }
+
+  .modal-button-delete {
+    @apply flex-1 px-4 py-2 bg-red-600 hover:bg-red-500 rounded-lg text-white font-medium transition-all;
+  }
+
+  /* Cards */
+  .card {
+    @apply glass rounded-xl p-6 border border-accent-500/20;
+  }
+
+  .card-large {
+    @apply glass rounded-xl p-8 border border-accent-500/20;
+  }
+
+  .card-title {
+    @apply text-2xl font-bold text-accent-400 mb-6;
+  }
+
+  .card-title-large {
+    @apply text-3xl font-bold text-accent-400 mb-8;
+  }
+
+  /* Form */
+  .form-container {
+    @apply space-y-4;
+  }
+
+  .form-row {
+    @apply grid grid-cols-1 md:grid-cols-3 gap-4;
+  }
+
+  .form-select {
+    @apply glass rounded-lg px-4 py-3 text-gray-200 bg-dark-800/50 border border-accent-500/20 focus:border-accent-500 focus:ring-2 focus:ring-accent-500/20 outline-none transition-all;
+  }
+
+  .form-input {
+    @apply glass rounded-lg px-4 py-3 text-gray-200 bg-dark-800/50 border border-accent-500/20 focus:border-accent-500 focus:ring-2 focus:ring-accent-500/20 outline-none transition-all placeholder-gray-500;
+  }
+
+  .form-textarea {
+    @apply w-full glass rounded-lg px-4 py-3 text-gray-200 bg-dark-800/50 border border-accent-500/20 focus:border-accent-500 focus:ring-2 focus:ring-accent-500/20 outline-none transition-all placeholder-gray-500 resize-none;
+  }
+
+  .form-button {
+    @apply w-full bg-gradient-to-r from-accent-600 to-accent-500 hover:from-accent-500 hover:to-accent-400 text-white font-bold py-3 rounded-lg transition-all duration-300 shadow-lg shadow-accent-500/30 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Table */
+  .table-container {
+    @apply glass rounded-xl border border-accent-500/20 overflow-hidden;
+  }
+
+  .table-wrapper {
+    @apply overflow-x-auto;
+  }
+
+  .table {
+    @apply w-full;
+  }
+
+  .table-header {
+    @apply bg-dark-800/50 border-b border-accent-500/20;
+  }
+
+  .table-header-cell {
+    @apply px-6 py-4 text-left text-sm font-semibold text-accent-400;
+  }
+
+  .table-header-cell-right {
+    @apply px-6 py-4 text-right text-sm font-semibold text-accent-400;
+  }
+
+  .table-header-cell-center {
+    @apply px-6 py-4 text-center text-sm font-semibold text-accent-400;
+  }
+
+  .table-body {
+    @apply divide-y divide-accent-500/10;
+  }
+
+  .table-row {
+    @apply glass-hover;
+  }
+
+  .table-cell {
+    @apply px-6 py-4 text-sm text-gray-300;
+  }
+
+  .table-cell-bold {
+    @apply px-6 py-4 text-sm text-gray-200;
+  }
+
+  .table-cell-right {
+    @apply px-6 py-4 text-sm text-right font-semibold;
+  }
+
+  .table-cell-center {
+    @apply px-6 py-4 text-center;
+  }
+
+  .table-cell-empty {
+    @apply px-6 py-12 text-center;
+  }
+
+  /* Badges */
+  .badge-income {
+    @apply inline-flex px-3 py-1 rounded-full text-xs font-medium bg-accent-500/20 text-accent-400 border border-accent-500/30;
+  }
+
+  .badge-expense {
+    @apply inline-flex px-3 py-1 rounded-full text-xs font-medium bg-red-500/20 text-red-400 border border-red-500/30;
+  }
+
+  /* Amounts */
+  .amount-income {
+    @apply text-accent-400;
+  }
+
+  .amount-expense {
+    @apply text-red-400;
+  }
+
+  /* Buttons */
+  .button-delete {
+    @apply px-4 py-2 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg transition-all border border-red-500/30 text-sm font-medium;
+  }
+
+  /* Empty State */
+  .empty-state {
+    @apply flex flex-col items-center gap-2;
+  }
+
+  .empty-state-icon {
+    @apply w-16 h-16 rounded-full glass border border-accent-500/20 flex items-center justify-center text-3xl;
+  }
+
+  .empty-state-title {
+    @apply text-lg text-gray-500;
+  }
+
+  .empty-state-subtitle {
+    @apply text-sm text-gray-500;
+  }
+
+  /* Report Cards */
+  .report-card {
+    @apply flex items-center justify-between p-6 glass-hover rounded-lg border border-accent-500/10;
+  }
+
+  .report-card-expense {
+    @apply flex items-center justify-between p-6 glass-hover rounded-lg border border-red-500/10;
+  }
+
+  .report-card-total {
+    @apply flex items-center justify-between p-8 glass rounded-lg border-2 border-accent-500/30 bg-gradient-to-br from-accent-500/5 to-transparent;
+  }
+
+  .report-card-content {
+    @apply flex items-center gap-4;
+  }
+
+  .report-icon {
+    @apply w-12 h-12 rounded-lg bg-accent-500/20 flex items-center justify-center text-2xl;
+  }
+
+  .report-icon-expense {
+    @apply w-12 h-12 rounded-lg bg-red-500/20 flex items-center justify-center text-2xl;
+  }
+
+  .report-icon-large {
+    @apply w-16 h-16 rounded-xl bg-gradient-to-br from-accent-600 to-accent-500 flex items-center justify-center text-3xl shadow-lg shadow-accent-500/30;
+  }
+
+  .report-label {
+    @apply text-sm text-gray-400 mb-1;
+  }
+
+  .report-label-large {
+    @apply text-sm text-gray-400 mb-2;
+  }
+
+  .report-value {
+    @apply text-3xl font-bold text-accent-400;
+  }
+
+  .report-value-expense {
+    @apply text-3xl font-bold text-red-400;
+  }
+
+  .report-value-large {
+    @apply text-4xl font-bold;
+  }
+  /* Date Range Filter */
+  .date-filter-container {
+    @apply flex flex-col sm:flex-row gap-4 mb-6 p-4 glass rounded-lg border border-accent-500/20;
+  }
+
+  .date-filter-label {
+    @apply text-sm font-medium text-gray-300 mb-1;
+  }
+
+  .date-filter-input {
+    @apply glass rounded-lg px-4 py-2 text-gray-200 bg-dark-800/50 border border-accent-500/20 focus:border-accent-500 focus:ring-2 focus:ring-accent-500/20 outline-none transition-all;
+  }
+
+  .date-filter-button {
+    @apply px-6 py-2 bg-gradient-to-r from-accent-600 to-accent-500 hover:from-accent-500 hover:to-accent-400 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg shadow-accent-500/30;
+  }
+
+  .date-filter-clear {
+    @apply px-6 py-2 glass-hover rounded-lg text-gray-300 font-semibold transition-all border border-accent-500/20;
+  }
+
+  .date-filter-group {
+    @apply flex-1;
+  }
+  /* Print Button */
+  .print-button {
+    @apply px-6 py-3 bg-gradient-to-r from-accent-600 to-accent-500 hover:from-accent-500 hover:to-accent-400 text-white font-bold rounded-lg transition-all duration-300 shadow-lg shadow-accent-500/30 flex items-center gap-2;
+  }
+
+  .print-header {
+    @apply hidden;
+  }
+
+  .print-date-range {
+    @apply hidden;
+  }
+  /* Login Modal */
+  .login-overlay {
+    @apply fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50;
+  }
+
+  .login-modal {
+    @apply glass rounded-2xl p-8 max-w-md w-full mx-4 border-2 border-accent-500/30 shadow-2xl shadow-accent-500/20;
+  }
+
+  .login-title {
+    @apply text-3xl font-bold text-center mb-2 bg-gradient-to-r from-accent-400 to-accent-600 bg-clip-text text-transparent;
+  }
+
+  .login-subtitle {
+    @apply text-center text-gray-400 mb-8;
+  }
+
+  .login-form {
+    @apply space-y-4;
+  }
+
+  .login-input-group {
+    @apply space-y-2;
+  }
+
+  .login-label {
+    @apply text-sm font-medium text-gray-300;
+  }
+
+  .login-input {
+    @apply w-full glass rounded-lg px-4 py-3 text-gray-200 bg-dark-800/50 border border-accent-500/20 focus:border-accent-500 focus:ring-2 focus:ring-accent-500/20 outline-none transition-all;
+  }
+
+  .login-button {
+    @apply w-full bg-gradient-to-r from-accent-600 to-accent-500 hover:from-accent-500 hover:to-accent-400 text-white font-bold py-3 rounded-lg transition-all duration-300 shadow-lg shadow-accent-500/30 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .login-error {
+    @apply text-red-400 text-sm text-center p-3 glass border border-red-500/30 rounded-lg bg-red-500/10;
+  }
+}
+
+/* Print Styles */
+@media print {
+  /* Hide everything except what we want to print */
+  .app-header,
+  .nav-container,
+  .error-banner,
+  .loading-container,
+  .date-filter-container,
+  .print-button {
+    display: none !important;
+  }
+
+  /* Make background white for printing */
+  body,
+  .app-container {
+    background: white !important;
+    color: black !important;
+  }
+
+  /* Remove glass effects for print */
+  .glass,
+  .card-large {
+    background: white !important;
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+
+  /* Print-specific text colors */
+  .card-title-large,
+  .report-label,
+  .report-label-large,
+  .table-header-cell,
+  .table-header-cell-right,
+  .table-header-cell-center {
+    color: black !important;
+  }
+
+  /* Ensure good contrast for amounts */
+  .report-value,
+  .amount-income {
+    color: #16a34a !important;
+  }
+
+  .report-value-expense,
+  .amount-expense {
+    color: #dc2626 !important;
+  }
+
+  /* Page breaks */
+  .report-section {
+    page-break-inside: avoid;
+  }
+
+  .table-row {
+    page-break-inside: avoid;
+  }
+
+  /* Table styling for print */
+  .table {
+    border-collapse: collapse;
+  }
+
+  .table-header-cell,
+  .table-cell,
+  .table-cell-bold,
+  .table-cell-right,
+  .table-cell-center {
+    border: 1px solid #ddd;
+    padding: 8px;
+    color: black !important;
+  }
+
+  .table-header {
+    background-color: #f3f4f6 !important;
+  }
+
+  /* Hide interactive elements */
+  .button-delete,
+  .modal-overlay {
+    display: none !important;
+  }
+
+  /* Print header */
+  .print-header {
+    display: block;
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #333;
+  }
+
+  .print-date-range {
+    display: block;
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+  }
+}
+
+/* Print-specific classes (hidden on screen, visible on print) */
+.print-only {
+  display: none;
+}
+
+@media print {
+  .print-only {
+    display: block;
+  }
+}
+
