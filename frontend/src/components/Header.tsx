@@ -19,7 +19,7 @@ function Header({ user, onLogout }: HeaderProps) {
             <p className="header-subtitle">Financial Management System</p>
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-gray-400 text-sm">Welcome, {user?.email}</span>
+            <span className="text-gray-400 text-sm">Welcome, {user?.name}</span>
             <button onClick={onLogout} className="px-4 py-2 glass-hover rounded-lg text-gray-300 text-sm font-medium transition-all">
               Logout
             </button>
