@@ -1,18 +1,14 @@
 import { useState, useEffect, useCallback } from 'react'
-
-interface Transaction {
-  id: string
-  description: string
-  amount: number
-  transaction_type: string
-  transaction_date: string
-}
-
-interface User {
-  id: string
-  email: string
-  name: string
-}
+import LoginModal from './components/LoginModal.tsx'
+import Header from './components/Header.tsx'
+import Navigation from './components/Navigation.tsx'
+import ErrorBanner from './components/ErrorBanner.tsx'
+import LoadingSpinner from './components/LoadingSpinner.tsx'
+import DeleteConfirmation from './components/DeleteConfirmation.tsx'
+import TransactionForm from './components/TransactionForm.tsx'
+import TransactionTable from './components/TransactionTable.tsx'
+import IncomeStatement from './components/IncomeStatement.tsx'
+import type { Transaction, User } from './types'
 
 function App() {
   const [user, setUser] = useState<User | null>(null)
@@ -247,13 +243,6 @@ function App() {
     }
   }
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(amount)
-  }
-
   const handleFilterByDate = () => {
     loadIncomeStatement(dateRange.startDate, dateRange.endDate)
     loadTransactions(dateRange.startDate, dateRange.endDate)
@@ -269,383 +258,68 @@ function App() {
     window.print()
   }
 
-  const formatDateRange = () => {
-    if (dateRange.startDate && dateRange.endDate) {
-      return `${dateRange.startDate} to ${dateRange.endDate}`
-    } else if (dateRange.startDate) {
-      return `From ${dateRange.startDate}`
-    } else if (dateRange.endDate) {
-      return `Until ${dateRange.endDate}`
-    }
-    return 'All Time'
+  const handleDeleteClick = (id: string) => {
+    setShowDeleteConfirm(id)
   }
 
   // Show login modal if not authenticated
   if (!isAuthenticated) {
     return (
-      <div className="login-overlay">
-        <div className="login-modal">
-          <h1 className="login-title">Not "QuickBooks" Lite</h1>
-          <p className="login-subtitle">Financial Management</p>
-          
-          <form onSubmit={handleLogin} className="login-form">
-            <div className="login-input-group">
-              <label className="login-label">Email</label>
-              <input
-                type="email"
-                value={loginData.email}
-                onChange={(e) => setLoginData({...loginData, email: e.target.value})}
-                className="login-input"
-                placeholder="your@email.com"
-                required
-                disabled={loginLoading}
-              />
-            </div>
-            
-            <div className="login-input-group">
-              <label className="login-label">Password</label>
-              <input
-                type="password"
-                value={loginData.password}
-                onChange={(e) => setLoginData({...loginData, password: e.target.value})}
-                className="login-input"
-                placeholder="••••••••"
-                required
-                disabled={loginLoading}
-              />
-            </div>
-
-            {loginError && (
-              <div className="login-error">
-                {loginError}
-              </div>
-            )}
-
-            <button type="submit" className="login-button" disabled={loginLoading}>
-              {loginLoading ? 'Logging in...' : 'Login'}
-            </button>
-          </form>
-        </div>
-      </div>
+      <LoginModal 
+        loginData={loginData}
+        onLoginDataChange={setLoginData}
+        onLogin={handleLogin}
+        loginError={loginError}
+        loginLoading={loginLoading}
+      />
     )
   }
 
   return (
     <div className="app-container">
-      <header className="app-header">
-        <div className="header-content">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="header-title">Not "QuickBooks" Lite</h1>
-              <p className="header-subtitle">Financial Management System</p>
-            </div>
-            <div className="flex items-center gap-4">
-              <span className="text-gray-400 text-sm">Welcome, {user?.email}</span>
-              <button onClick={handleLogout} className="px-4 py-2 glass-hover rounded-lg text-gray-300 text-sm font-medium transition-all">
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header user={user} onLogout={handleLogout} />
 
-      <nav className="nav-container">
-        <div className="nav-buttons">
-          <button 
-            className={selectedTab === 'transactions' ? 'nav-button-active' : 'nav-button'}
-            onClick={() => setSelectedTab('transactions')}
-          >
-            Transactions
-          </button>
-          <button 
-            className={selectedTab === 'reports' ? 'nav-button-active' : 'nav-button'}
-            onClick={() => setSelectedTab('reports')}
-          >
-            Reports
-          </button>
-        </div>
-      </nav>
+      <Navigation selectedTab={selectedTab} onTabChange={setSelectedTab} />
 
-      {error && (
-        <div className="content-container">
-          <div className="error-banner">
-            <div className="error-banner-content">
-              <div className="error-banner-dot"></div>
-              <span className="error-banner-text">{error}</span>
-            </div>
-            <button onClick={() => setError(null)} className="error-banner-close">✕</button>
-          </div>
-        </div>
-      )}
+      <ErrorBanner error={error} onDismiss={() => setError(null)} />
 
-      {loading && (
-        <div className="content-container">
-          <div className="loading-container">
-            <div className="loading-spinner"></div>
-            <span className="loading-text">Loading...</span>
-          </div>
-        </div>
-      )}
+      <LoadingSpinner loading={loading} />
 
-      {showDeleteConfirm && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h3 className="modal-title">Confirm Delete</h3>
-            <p className="modal-text">
-              Are you sure you want to delete this transaction? This action cannot be undone.
-            </p>
-            <div className="modal-buttons">
-              <button onClick={() => setShowDeleteConfirm(null)} className="modal-button-cancel">
-                Cancel
-              </button>
-              <button onClick={() => handleDeleteTransaction(showDeleteConfirm)} className="modal-button-delete">
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <DeleteConfirmation
+        showDeleteConfirm={showDeleteConfirm}
+        onCancel={() => setShowDeleteConfirm(null)}
+        onConfirm={handleDeleteTransaction}
+        loading={loading}
+      />
 
       <main className="main-content">
         {selectedTab === 'transactions' && (
           <div className="section-spacing">
-            <div className="card">
-              <h2 className="card-title">Add Transaction</h2>
-              
-              <form onSubmit={handleCreateTransaction} className="form-container">
-                <div className="form-row">
-                  <select
-                    value={newTransaction.transaction_type}
-                    onChange={(e) => setNewTransaction({...newTransaction, transaction_type: e.target.value})}
-                    className="form-select"
-                    disabled={loading}
-                  >
-                    <option value="Income">Income</option>
-                    <option value="Expense">Expense</option>
-                  </select>
-                  
-                  <input
-                    type="number"
-                    step="0.01"
-                    min="0.01"
-                    placeholder="Amount"
-                    value={newTransaction.amount}
-                    onChange={(e) => setNewTransaction({...newTransaction, amount: e.target.value})}
-                    className="form-input"
-                    disabled={loading}
-                  />
-                  
-                  <input
-                    type="date"
-                    value={newTransaction.transaction_date}
-                    onChange={(e) => setNewTransaction({...newTransaction, transaction_date: e.target.value})}
-                    className="form-input"
-                    disabled={loading}
-                  />
-                </div>
-                
-                <textarea
-                  placeholder="Description (e.g., '50 chocolate chip cookies for wedding', 'Flour and sugar purchase', etc.)"
-                  value={newTransaction.description}
-                  onChange={(e) => setNewTransaction({...newTransaction, description: e.target.value})}
-                  className="form-textarea"
-                  rows={3}
-                  disabled={loading}
-                />
-                
-                <button type="submit" className="form-button" disabled={loading}>
-                  Add Transaction
-                </button>
-              </form>
-            </div>
+            <TransactionForm
+              newTransaction={newTransaction}
+              onTransactionChange={setNewTransaction}
+              onSubmit={handleCreateTransaction}
+              loading={loading}
+            />
 
-            <div className="table-container">
-              <div className="table-wrapper">
-                <table className="table">
-                  <thead className="table-header">
-                    <tr>
-                      <th className="table-header-cell">Date</th>
-                      <th className="table-header-cell">Description</th>
-                      <th className="table-header-cell">Type</th>
-                      <th className="table-header-cell-right">Amount</th>
-                      <th className="table-header-cell-center">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="table-body">
-                    {transactions.length === 0 ? (
-                      <tr>
-                        <td colSpan={5} className="table-cell-empty">
-                          <div className="empty-state">
-                            <div className="empty-state-icon">📊</div>
-                            <p className="empty-state-title">No transactions yet</p>
-                            <p className="empty-state-subtitle">Add your first transaction to get started!</p>
-                          </div>
-                        </td>
-                      </tr>
-                    ) : (
-                      transactions.map((transaction) => (
-                        <tr key={transaction.id} className="table-row">
-                          <td className="table-cell">{transaction.transaction_date}</td>
-                          <td className="table-cell-bold">{transaction.description}</td>
-                          <td className="table-cell">
-                            <span className={transaction.transaction_type === 'Income' ? 'badge-income' : 'badge-expense'}>
-                              {transaction.transaction_type}
-                            </span>
-                          </td>
-                          <td className={`table-cell-right ${transaction.transaction_type === 'Income' ? 'amount-income' : 'amount-expense'}`}>
-                            {formatCurrency(transaction.amount)}
-                          </td>
-                          <td className="table-cell-center">
-                            <button
-                              onClick={() => setShowDeleteConfirm(transaction.id)}
-                              className="button-delete"
-                              disabled={loading}
-                            >
-                              Delete
-                            </button>
-                          </td>
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+            <TransactionTable
+              transactions={transactions}
+              onDelete={handleDeleteClick}
+              loading={loading}
+            />
           </div>
         )}
 
         {selectedTab === 'reports' && (
-          <div className="section-spacing">
-            <div className="card-large">
-              <div className="print-only print-header">
-                <h1>Not "QuickBooks" Lite</h1>
-                <h2>Financial Report</h2>
-              </div>
-              
-              <div className="print-only print-date-range">
-                <strong>Period:</strong> {formatDateRange()}
-              </div>
-              
-              <h2 className="card-title-large">Income Statement</h2>
-              
-              <div className="date-filter-container">
-                <div className="date-filter-group">
-                  <label className="date-filter-label">Start Date</label>
-                  <input
-                    type="date"
-                    value={dateRange.startDate}
-                    onChange={(e) => setDateRange({...dateRange, startDate: e.target.value})}
-                    className="date-filter-input"
-                  />
-                </div>
-                
-                <div className="date-filter-group">
-                  <label className="date-filter-label">End Date</label>
-                  <input
-                    type="date"
-                    value={dateRange.endDate}
-                    onChange={(e) => setDateRange({...dateRange, endDate: e.target.value})}
-                    className="date-filter-input"
-                  />
-                </div>
-                
-                <div className="date-filter-group">
-                  <label className="date-filter-label">&nbsp;</label>
-                  <div className="flex gap-2">
-                    <button onClick={handleFilterByDate} className="date-filter-button">
-                      Apply Filter
-                    </button>
-                    <button onClick={handleClearFilter} className="date-filter-clear">
-                      Clear
-                    </button>
-                  </div>
-                </div>
-              </div>
-              
-              <button onClick={handlePrint} className="print-button">
-                <span>🖨️</span>
-                <span>Print Report</span>
-              </button>
-              
-              <div className="section-spacing report-section">
-                <div className="report-card">
-                  <div className="report-card-content">
-                    <div className="report-icon">💰</div>
-                    <div>
-                      <p className="report-label">Total Income</p>
-                      <p className="report-value">{formatCurrency(incomeStatement.income)}</p>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="report-card-expense">
-                  <div className="report-card-content">
-                    <div className="report-icon-expense">💸</div>
-                    <div>
-                      <p className="report-label">Total Expenses</p>
-                      <p className="report-value-expense">{formatCurrency(incomeStatement.expenses)}</p>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="report-card-total">
-                  <div className="report-card-content">
-                    <div className="report-icon-large">📈</div>
-                    <div>
-                      <p className="report-label-large">Net Income</p>
-                      <p className={`report-value-large ${incomeStatement.net_income >= 0 ? 'amount-income' : 'amount-expense'}`}>
-                        {formatCurrency(incomeStatement.net_income)}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="report-section">
-                <h3 className="card-title">Transaction Details</h3>
-                <div className="table-container">
-                  <div className="table-wrapper">
-                    <table className="table">
-                      <thead className="table-header">
-                        <tr>
-                          <th className="table-header-cell">Date</th>
-                          <th className="table-header-cell">Description</th>
-                          <th className="table-header-cell">Type</th>
-                          <th className="table-header-cell-right">Amount</th>
-                        </tr>
-                      </thead>
-                      <tbody className="table-body">
-                        {transactions.length === 0 ? (
-                          <tr>
-                            <td colSpan={4} className="table-cell-empty">
-                              <div className="empty-state">
-                                <p className="empty-state-title">No transactions in this period</p>
-                              </div>
-                            </td>
-                          </tr>
-                        ) : (
-                          transactions.map((transaction) => (
-                            <tr key={transaction.id} className="table-row">
-                              <td className="table-cell">{transaction.transaction_date}</td>
-                              <td className="table-cell-bold">{transaction.description}</td>
-                              <td className="table-cell">
-                                <span className={transaction.transaction_type === 'Income' ? 'badge-income' : 'badge-expense'}>
-                                  {transaction.transaction_type}
-                                </span>
-                              </td>
-                              <td className={`table-cell-right ${transaction.transaction_type === 'Income' ? 'amount-income' : 'amount-expense'}`}>
-                                {formatCurrency(transaction.amount)}
-                              </td>
-                            </tr>
-                          ))
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <IncomeStatement
+            incomeStatement={incomeStatement}
+            transactions={transactions}
+            dateRange={dateRange}
+            onDateRangeChange={setDateRange}
+            onFilter={handleFilterByDate}
+            onClear={handleClearFilter}
+            onPrint={handlePrint}
+          />
         )}
       </main>
     </div>
